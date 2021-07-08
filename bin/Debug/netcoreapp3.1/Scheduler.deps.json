@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "Scheduler/1.0.0": {
+        "dependencies": {
+          "InertiaCore": "1.3.232.0"
+        },
+        "runtime": {
+          "Scheduler.dll": {}
+        }
+      },
+      "InertiaCore/1.3.232.0": {
+        "runtime": {
+          "InertiaCore.dll": {
+            "assemblyVersion": "1.3.232.0",
+            "fileVersion": "1.3.232.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Scheduler/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "InertiaCore/1.3.232.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
