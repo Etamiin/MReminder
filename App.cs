@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using Inertia;
+using Microsoft.Win32;
 
 namespace Scheduler
 {
@@ -29,7 +30,7 @@ namespace Scheduler
             _dataDict = new Dictionary<int, SchedulerElementData>();
             _controlDict = new Dictionary<int, SchedulerElement>();
             _notifications = new List<SchedulerNotification>();
-            
+
             var notifyMenu = new ContextMenuStrip();
 
             var quitItem = notifyMenu.Items.Add("Quit");
@@ -37,20 +38,24 @@ namespace Scheduler
 
             notifyIcon.ContextMenuStrip = notifyMenu;
 
-            notifyIcon.DoubleClick += (sender, e) => {
+            notifyIcon.DoubleClick += (sender, e) =>
+            {
                 WindowState = FormWindowState.Normal;
                 ShowInTaskbar = true;
             };
-            notifyIcon.BalloonTipClicked += (sender, e) => {
+            notifyIcon.BalloonTipClicked += (sender, e) =>
+            {
                 WindowState = FormWindowState.Normal;
                 ShowInTaskbar = true;
             };
 
-            Resize += (sender, e) => { 
+            Resize += (sender, e) =>
+            {
                 if (WindowState == FormWindowState.Minimized)
                     ShowInTaskbar = false;
             };
 
+            SetStartup();
             Instance = this;
         }
 
@@ -99,7 +104,8 @@ namespace Scheduler
                         c.Size = new Size(mainContainer.Size.Width - 6, ctrl.Size.Height);
                 }
             }
-            catch {
+            catch
+            {
                 MessageBox.Show("An Error occured when trying to delete the Scheduler");
             }
         }
@@ -107,7 +113,7 @@ namespace Scheduler
         private void newButton_Click(object sender, EventArgs e)
         {
             var creator = new SchedulerCreator();
-            
+
             creator.Size = mainContainer.Size;
             creator.Location = mainContainer.Location;
             creator.Parent = this;
@@ -152,7 +158,7 @@ namespace Scheduler
                 notif.Notified = true;
                 element.SetCompleted();
             }
-            
+
             _notifications.Add(notif);
 
             if (_controlDict.Count >= 4)
@@ -176,7 +182,7 @@ namespace Scheduler
                 return id;
             }
         }
-    
+
         private void LoadDb()
         {
             if (!File.Exists(_dbPath))
@@ -226,6 +232,14 @@ namespace Scheduler
                     notifyIcon.ShowBalloonTip(10, data.Title, data.Details, ToolTipIcon.Info);
                 }
             }
+        }
+
+        private void SetStartup()
+        {
+            var rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+            if (rk.GetValue("Scheduler") == null)
+                rk.SetValue("Scheduler", Application.ExecutablePath);
         }
     }
 }
